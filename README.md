@@ -1,4 +1,4 @@
-message-rest-flask
+Rest API for Message app
 ==================
 
 An example of a rest interface using flask.
