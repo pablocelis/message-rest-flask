@@ -4,23 +4,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# This array stores the messages sent by the user
-messages = [
-	{
-		'id': 1,
-		'sender': u'Peter',
-		'message': u'Hey, how this work?',
-		'timestamp': datetime.now(),
-		'read': False
-	},
-	{
-		'id': 2,
-		'sender': u'John',
-		'message': u'Just write stuff',
-		'timestamp': datetime.now(),
-		'read': False
-	}
-]
+messages = []
 
 @app.route('/messages/api/message/all', methods=['GET'])
 def get_all_messages():
