@@ -39,8 +39,12 @@ def get_message(id):
 
 
 @app.route('/messages/api/message', methods=['POST'])
-def create_message():	
+def create_message():
+
 	if not request.json or not 'message' in request.json:
+		abort(400)
+
+	if 'message' in request.json and type(request.json['message']) is not unicode:
 		abort(400)
 
 	# Get the id of the last message and create the new one

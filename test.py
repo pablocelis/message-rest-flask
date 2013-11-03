@@ -18,10 +18,10 @@ class TestAPI:
 		print("teardown_class(): After everything in the class")
 
 	def setup(self):
-		print("setup(): before each method")
+		pass
 		
 	def teardown(self):
-		print("teardown(): after each method")
+		pass
 
 	def get_message(self, index):
 		response = self.app.get('/messages/api/message/'+str(index))
@@ -64,8 +64,36 @@ class TestAPI:
 
 		self.create_message(message)
 
+
+	def test_create_message_bad_request(self):
+
+		# Request without json
+		response = self.app.post('messages/api/message',
+								content_type='application/json')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,400)
+
+		#Request without 'message'
+		response = self.app.post('messages/api/message',
+								data = json.dumps({'sender':u'Phill'}),
+								content_type='application/json')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,400)
+
+		#Request with 'message' but not unicode
+		response = self.app.post('messages/api/message',
+								data = json.dumps({'message':234534634}),
+								content_type='application/json')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,400)
+
+
 	def test_get_message(self):
 		self.get_message(1)
+
 
 	def test_edit_message(self):
 		response = self.app.put('messages/api/message/3',
@@ -79,6 +107,42 @@ class TestAPI:
 		message = body['message']
 		eq_(message['sender'], 'Ray')
 		eq_(message['message'], 'content edited')
+
+
+	def test_edit_message_not_found(self):
+		response = self.app.put('messages/api/message/14',
+								data = json.dumps({'message':u'content edited'}),
+								content_type='application/json')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,404)
+
+
+	def test_edit_message_bad_request(self):
+
+		# Request without json
+		response = self.app.put('messages/api/message/3',
+								content_type='application/json')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,400)
+
+		#Request without 'message'
+		response = self.app.put('messages/api/message/3',
+								data = json.dumps({'sender':u'Phill'}),
+								content_type='application/json')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,400)
+
+		#Request with 'message' but not unicode
+		response = self.app.put('messages/api/message/3',
+								data = json.dumps({'message':234534634}),
+								content_type='application/json')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,400)
+
 
 	def test_delete_message(self):
 		message = {
@@ -94,6 +158,14 @@ class TestAPI:
 
 		body = json.loads(response.data)
 		assert_true(body['deleted'])
+
+	def test_delete_message_not_found(self):
+
+		response = self.app.delete('messages/api/message/35')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,404)
+
 
 
 
