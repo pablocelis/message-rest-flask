@@ -1,10 +1,25 @@
 #!flask/bin/python
-from flask import Flask, jsonify, abort, make_response, request
+from flask import Flask, jsonify, abort, make_response, request, json
 from datetime import datetime
 
 app = Flask(__name__)
 
-messages = []
+messages = [
+			{
+				'id': 1,
+				'sender': u'Peter',
+				'message': u'Hey, how this work?',
+				'timestamp': datetime.now(),
+				'read': False
+			},
+			{
+				'id': 2,
+				'sender': u'John',
+				'message': u'Just write stuff',
+				'timestamp': datetime.now(),
+				'read': False
+			}
+		]
 
 @app.route('/messages/api/message/all', methods=['GET'])
 def get_all_messages():
@@ -24,8 +39,7 @@ def get_message(id):
 
 
 @app.route('/messages/api/message', methods=['POST'])
-def create_message():
-	# If there is not a request or a message into the request, return 400 ERROR
+def create_message():	
 	if not request.json or not 'message' in request.json:
 		abort(400)
 
