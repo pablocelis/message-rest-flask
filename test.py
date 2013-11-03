@@ -94,6 +94,16 @@ class TestAPI:
 	def test_get_message(self):
 		self.get_message(1)
 
+	def test_get_all_messages(self):
+		response = self.app.get('/messages/api/message/all')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,200)
+
+		body = json.loads(response.data)
+		message = body['messages']
+		assert_true(len(message) > 0)
+
 
 	def test_edit_message(self):
 		response = self.app.put('messages/api/message/3',
