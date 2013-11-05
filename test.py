@@ -94,6 +94,9 @@ class TestAPI:
 	def test_get_message(self):
 		self.get_message(1)
 
+	def test_get_message_not_found(self):
+		self.get_message(34)
+
 	def test_get_all_messages(self):
 		response = self.app.get('/messages/api/message/all')
 

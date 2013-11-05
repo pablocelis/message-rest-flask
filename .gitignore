@@ -1,6 +1,9 @@
 # Virtual Env #
 flask/
 *.pyc
+*.output
+*.xml
+*.coverage
 
 # Compiled source #
 ###################
