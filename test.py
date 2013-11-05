@@ -95,7 +95,10 @@ class TestAPI:
 		self.get_message(1)
 
 	def test_get_message_not_found(self):
-		self.get_message(34)
+		response = self.app.get('/messages/api/message/45')
+
+		eq_(response.headers['Content-Type'], 'application/json')
+		eq_(response.status_code,404)
 
 	def test_get_all_messages(self):
 		response = self.app.get('/messages/api/message/all')
